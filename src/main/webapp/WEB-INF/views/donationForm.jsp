@@ -3,50 +3,192 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ include file="header.jsp" %>
 
-<h2>Dodaj Dar</h2>
+<div class="slogan container container--90">
+    <div class="slogan--item">
+        <h1>
+            Oddaj rzeczy, których już nie chcesz<br/>
+            <span class="uppercase">potrzebującym</span>
+        </h1>
+        <div class="slogan--steps">
+            <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
+            <ul class="slogan--steps-boxes">
+                <li>
+                    <div><em>1</em><span>Wybierz rzeczy</span></div>
+                </li>
+                <li>
+                    <div><em>2</em><span>Spakuj je w worki</span></div>
+                </li>
+                <li>
+                    <div><em>3</em><span>Wybierz fundację</span></div>
+                </li>
+                <li>
+                    <div><em>4</em><span>Zamów kuriera</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-<form:form id="donationForm" modelAttribute="donation" method="post">
-    <div class="form-group">
-        <form:label path="quantity">Liczba worków:</form:label>
-        <form:input path="quantity" name="quantity"/>
-    </div>
-    <div class="form-group">
-        <form:label path="categories">Kategoria:</form:label>
-        <form:checkboxes path="categories" items="${categories}" itemValue="id" itemLabel="name" name="categories"/>
-    </div>
-    <div class="form-group">
-        <form:label path="institution">Instytucja:</form:label>
-        <form:select path="institution.id" items="${institutions}" itemValue="id" itemLabel="name" name="institution.id"/>
-    </div>
-    <div class="form-group">
-        <form:label path="street">Ulica:</form:label>
-        <form:input path="street" name="street"/>
-    </div>
-    <div class="form-group">
-        <form:label path="city">Miasto:</form:label>
-        <form:input path="city" name="city"/>
-    </div>
-    <div class="form-group">
-        <form:label path="zipCode">Kod pocztowy:</form:label>
-        <form:input path="zipCode" name="zipCode"/>
-    </div>
-    <div class="form-group">
-        <form:label path="pickUpDate">Data odbioru:</form:label>
-        <form:input path="pickUpDate" type="date" name="pickUpDate"/>
-    </div>
-    <div class="form-group">
-        <form:label path="pickUpTime">Czas odbioru:</form:label>
-        <form:input path="pickUpTime" type="time" name="pickUpTime"/>
-    </div>
-    <div class="form-group">
-        <form:label path="pickUpComment">Komentarz do odbioru:</form:label>
-        <form:textarea path="pickUpComment" name="pickUpComment"/>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Dodaj Dar" />
-    </div>
-</form:form>
 
-<%@ include file="footer.jsp" %>
-
+<section class="form--steps">
+    <div class="form--steps-instructions">
+        <div class="form--steps-container">
+            <h3>Ważne!</h3>
+            <p data-step="1" class="step-description active">
+                Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
+                wiedzieć komu najlepiej je przekazać.
+            </p>
+            <p data-step="2" class="step-description">
+                Podaj liczbę worków, w które spakowałeś/aś rzeczy.
+            </p>
+            <p data-step="3" class="step-description">
+                Wybierz jedną, do której trafi Twoja przesyłka.
+            </p>
+            <p data-step="4" class="step-description">Podaj adres oraz termin odbioru rzeczy.</p>
+        </div>
+    </div>
+    <div class="form--steps-container">
+        <div class="form--steps-counter">Krok <span id="currentStep">1</span>/4</div>
+        <form:form id="donationForm" modelAttribute="donation" action="/donations" method="post">
+            <!-- STEP 1: class .active is switching steps -->
+            <div data-step="1" class="active">
+                <h3>Zaznacz co chcesz oddać:</h3>
+                <form:checkboxes path="categories" items="${categories}" itemValue="id" itemLabel="name"
+                                 cssClass="categoryCheckbox"/>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn next-step">Dalej</button>
+                </div>
+            </div>
+            <!-- STEP 2 -->
+            <div data-step="2">
+                <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
+                <div class="form-group form-group--inline">
+                    <label>
+                        Liczba 60l worków:
+                        <form:input type="number" path="quantity" step="1" min="1" id="quantity"/>
+                        <form:errors path="quantity"/>
+                    </label>
+                </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step">Dalej</button>
+                </div>
+            </div>
+            <!-- STEP 3 -->
+            <div data-step="3">
+                <h3>Wybierz organizacje, której chcesz pomóc:</h3>
+                <c:forEach var="institution" items="${institutions}">
+                    <div class="form-group form-group--radio">
+                        <label>
+                            <input type="radio" name="institution.id" value="${institution.id}"
+                                   class="institutionRadio"/>
+                            <span class="radio"></span>
+                            <span class="description">
+                                <div class="title">Fundacja "<c:out value="${institution.name}"/>"</div>
+                                <div class="subtitle">Cel i misja: <c:out value="${institution.description}"/></div>
+                            </span>
+                        </label>
+                    </div>
+                </c:forEach>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step">Dalej</button>
+                </div>
+            </div>
+            <!-- STEP 4 -->
+            <div data-step="4">
+                <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
+                <div class="form-section form-section--columns">
+                    <div class="form-section--column">
+                        <h4>Adres odbioru</h4>
+                        <div class="form-group form-group--inline">
+                            <label> Ulica <form:input path="street" id="street"/>
+                                <form:errors path="street" cssClass="error"/>
+                            </label>
+                        </div>
+                        <div class="form-group form-group--inline">
+                            <label> Miasto <form:input path="city" id="city"/><br>
+                                <form:errors path="city" cssClass="error"/>
+                            </label>
+                        </div>
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Kod pocztowy <form:input path="zipCode" id="zipCode"/><br>
+                                <form:errors path="zipCode" cssClass="error"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-section--column">
+                        <h4>Termin odbioru</h4>
+                        <div class="form-group form-group--inline">
+                            <label> Data <form:input path="pickUpDate" type="date" id="pickUpDate"/></label>
+                            <form:errors path="pickUpDate" cssClass="error"/>
+                        </div>
+                        <div class="form-group form-group--inline">
+                            <label> Godzina <form:input path="pickUpTime" type="time" value="10:00"
+                                                        id="pickUpTime"/></label>
+                            <form:errors path="pickUpTime" cssClass="error"/>
+                        </div>
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Uwagi dla kuriera
+                                <form:textarea path="pickUpComment" rows="5" id="pickUpComment"/>
+                                <form:errors path="pickUpComment" cssClass="error"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step">Podsumowanie</button>
+                </div>
+            </div>
+            <!-- STEP 5 (Podsumowanie) -->
+            <div data-step="5">
+                <h3>Podsumowanie Twojej darowizny</h3>
+                <div class="summary">
+                    <div class="form-section">
+                        <h4>Oddajesz:</h4>
+                        <ul>
+                            <li>
+                                <span class="icon icon-bag"></span>
+                                <span class="summary--text" id="summaryBags"></span>
+                            </li>
+                            <li>
+                                <span class="icon icon-hand"></span>
+                                <span class="summary--text" id="summaryInstitutionName"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-section form-section--columns">
+                        <div class="form-section--column">
+                            <h4>Adres odbioru:</h4>
+                            <ul>
+                                <li><span id="summaryStreet"></span></li>
+                                <li><span id="summaryCity"></span></li>
+                                <li><span id="summaryZipCode"></span></li>
+                            </ul>
+                        </div>
+                        <div class="form-section--column">
+                            <h4>Termin odbioru:</h4>
+                            <ul>
+                                <li><span id="summaryPickUpDate"></span></li>
+                                <li><span id="summaryPickUpTime"></span></li>
+                                <li><span id="summaryPickUpComment"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="submit" class="btn">Potwierdzam</button>
+                </div>
+            </div>
+        </form:form>
+    </div>
+</section>
+<div id="contact" class="contact">
+    <%@ include file="footer.jsp" %>
+</div>
+<script src="<c:url value="/resources/js/summary.js"/>"></script>
 
