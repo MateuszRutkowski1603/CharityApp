@@ -29,7 +29,6 @@
     </div>
 </div>
 
-
 <section class="form--steps">
     <div class="form--steps-instructions">
         <div class="form--steps-container">
@@ -49,8 +48,8 @@
     </div>
     <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span id="currentStep">1</span>/4</div>
-        <form:form id="donationForm" modelAttribute="donation" action="/donations" method="post">
-            <!-- STEP 1: class .active is switching steps -->
+        <form:form id="donationForm" modelAttribute="donation" action="/donation/add" method="post">
+            <!-- STEP 1 -->
             <div data-step="1" class="active">
                 <h3>Zaznacz co chcesz oddać:</h3>
                 <form:checkboxes path="categories" items="${categories}" itemValue="id" itemLabel="name"
@@ -191,4 +190,3 @@
     <%@ include file="footer.jsp" %>
 </div>
 <script src="<c:url value="/resources/js/summary.js"/>"></script>
-

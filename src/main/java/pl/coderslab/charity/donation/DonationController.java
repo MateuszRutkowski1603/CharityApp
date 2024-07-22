@@ -29,8 +29,9 @@ public class DonationController {
         return "donationForm";
     }
     @PostMapping("/donation/add")
-    public String AddDonation(@ModelAttribute Donation donation) {
+    public String AddDonation(@ModelAttribute Donation donation,Model model) {
         donationRepository.save(donation);
-        return "redirect:/";
+        model.addAttribute("donation", donation);
+        return "donationSummary";
     }
 }
