@@ -9,7 +9,6 @@ import pl.coderslab.charity.category.CategoryRepository;
 import pl.coderslab.charity.institution.InstitutionRepository;
 
 
-
 @Controller
 public class DonationController {
     private final DonationRepository donationRepository;
@@ -21,6 +20,7 @@ public class DonationController {
         this.categoryRepository = categoryRepository;
         this.institutionRepository = institutionRepository;
     }
+
     @GetMapping("/donation/add")
     public String ShowAddDonation(Model model) {
         model.addAttribute("donation", new Donation());
@@ -28,8 +28,9 @@ public class DonationController {
         model.addAttribute("institutions", institutionRepository.findAll());
         return "donationForm";
     }
+
     @PostMapping("/donation/add")
-    public String AddDonation(@ModelAttribute Donation donation,Model model) {
+    public String AddDonation(@ModelAttribute Donation donation, Model model) {
         donationRepository.save(donation);
         model.addAttribute("donation", donation);
         return "donationSummary";

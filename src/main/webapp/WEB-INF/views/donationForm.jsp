@@ -189,4 +189,4 @@
 <div id="contact" class="contact">
     <%@ include file="footer.jsp" %>
 </div>
-<script src="<c:url value="/resources/js/summary.js"/>"></script>
+<script src="<c:url value="../resources/js/summary.js"/>"></script>
