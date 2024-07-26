@@ -21,9 +21,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/resources/**", "/css/**", "/js/**", "/images/**", "/registration","/donation/add","/").permitAll()
+                .antMatchers("/resources/**", "/css/**", "/js/**", "/images/**", "/registration","/","login","donation/add").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").permitAll()
+                .defaultSuccessUrl("/", true)
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/403");
 
