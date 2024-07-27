@@ -21,7 +21,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/resources/**", "/css/**", "/js/**", "/images/**", "/registration","/","login","donation/add").permitAll()
+                .antMatchers("/resources/**", "/css/**", "/js/**", "/images/**", "/registration","/","login","donation/add","institutions/**").permitAll()
+                .antMatchers("/institutions/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").permitAll()
                 .defaultSuccessUrl("/", true)

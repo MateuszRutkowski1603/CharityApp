@@ -12,4 +12,6 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
 
     @Query("SELECT COUNT(d) FROM Donation d")
     Long findTotalDonations();
+
+    void deleteAllByInstitutionId(Long institutionId);
 }
